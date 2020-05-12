@@ -1,0 +1,8 @@
+/node_modules
+/npm-debug.log
+/.idea
+/.dart_tool
+/.vscode
+/dist
+/obj/test
+/config/test_connections.yaml
