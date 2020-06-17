@@ -8,9 +8,9 @@ import 'package:test/test.dart';
 import 'SettingsClientFixtureV1.dart';
 
 var httpConfig = ConfigParams.fromTuples([
-    "connection.protocol", "http",
-    "connection.host", "localhost",
-    "connection.port", 3000
+    'connection.protocol', 'http',
+    'connection.host', 'localhost',
+    'connection.port', 3000
 ]);
 
 void main() {
@@ -20,9 +20,9 @@ group('SettingsHttpClientV1', () {
     SettingsClientFixtureV1 fixture;
 
     setUp(() async {
-        var logger = new ConsoleLogger();
-        var persistence = new SettingsMemoryPersistence();
-        var controller = new SettingsController();
+        var logger = ConsoleLogger();
+        var persistence = SettingsMemoryPersistence();
+        var controller = SettingsController();
 
         service = SettingsHttpServiceV1();
         service.configure(httpConfig);
@@ -40,15 +40,15 @@ group('SettingsHttpClientV1', () {
         client.setReferences(references);
         client.configure(httpConfig);
 
-        fixture = new SettingsClientFixtureV1(client);
+        fixture = SettingsClientFixtureV1(client);
 
         await service.open(null);
         await client.open(null);
     });
     
     tearDown(() async {
-        client.close(null);
-        service.close(null);
+        await client.close(null);
+        await service.close(null);
     });
 
     test('CRUD Operations', () async {
