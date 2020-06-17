@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:pip_services3_commons/pip_services3_commons.dart';
 import 'package:pip_services3_rpc/pip_services3_rpc.dart';
+import 'package:pip_services_settings/pip_services_settings.dart' as service;
 
 import 'ISettingsClientV1.dart';
 import 'SettingsSectionV1.dart';
@@ -36,9 +37,12 @@ class SettingsDirectClientV1 extends DirectClient<dynamic>
   Future<DataPage<SettingsSectionV1>> getSections(
       String correlationId, FilterParams filter, PagingParams paging) async {
     var timing = instrument(correlationId, 'settings.get_sections');
-    var page = await controller.getSections(correlationId, filter, paging);
+    DataPage<service.SettingsSectionV1> page =
+        await controller.getSections(correlationId, filter, paging);
     timing.endTiming();
-    return page;
+    return DataPage<SettingsSectionV1>(
+        page.data.map((s) => convertSettingsSectionToPublic(s)).toList(),
+        page.total);
   }
 
   /// Gets settings section by its unique id
@@ -81,5 +85,10 @@ class SettingsDirectClientV1 extends DirectClient<dynamic>
         correlationId, id, updateParams, incrementParams);
     timing.endTiming();
     return params;
+  }
+
+  SettingsSectionV1 convertSettingsSectionToPublic(
+      service.SettingsSectionV1 section) {
+    return SettingsSectionV1()..fromJson(section.toJson());
   }
 }
